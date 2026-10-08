@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="hi" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualcraft // Premium AI & Video Editing Portfolio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            accent: '#a855f7',
+                            cyan: '#06b6d4',
+                            ai: '#ec4899',
+                            normal: '#3b82f6'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glow: {
+                            '0%': { boxShadow: '0 0 15px rgba(168, 85, 247, 0.3)' },
+                            '100%': { boxShadow: '0 0 30px rgba(6, 182, 212, 0.6)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #080a11;
+            color: #f3f4f6;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(23, 31, 51, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(168, 85, 247, 0.25);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #6366f1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between custom-scrollbar selection:bg-purple-500 selection:text-white">
+
+    <!-- Toast Notification Overlay -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
+
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-slate-800/80">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-500 to-cyan-400 p-0.5 shadow-lg shadow-purple-500/20 group-hover:scale-105 transition-transform">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid font-bold fa-play text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-cyan-400 text-sm"></i>
+                    </div>
+                </div>
+                <div>
+                    <span class="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-slate-400">
+                        NEXUS<span class="text-purple-400">EDIT</span>
+                    </span>
+                    <span class="block text-[10px] uppercase tracking-widest text-slate-400 font-semibold">AI & High-End Edits</span>
+                </div>
+            </a>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center gap-1 bg-slate-900/80 p-1.5 rounded-full border border-slate-800">
+                <button onclick="setFilter('all')" id="navTabAll" class="px-5 py-2 rounded-full text-xs font-semibold transition-all bg-purple-600 text-white shadow-md shadow-purple-600/30">
+                    <i class="fa-solid fa-border-all mr-1.5"></i> All Works
+                </button>
+                <button onclick="setFilter('ai')" id="navTabAi" class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles text-pink-400 mr-1.5"></i> AI Product Editing
+                </button>
+                <button onclick="setFilter('normal')" id="navTabNormal" class="px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all">
+                    <i class="fa-solid fa-clapperboard text-blue-400 mr-1.5"></i> Normal & B-Roll
+                </button>
+            </nav>
+
+            <!-- Admin Status / Action Button -->
+            <div class="flex items-center gap-3">
+                <div id="adminIndicator" class="hidden items-center gap-2 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 px-3 py-1.5 rounded-full text-xs font-medium">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    Admin Active
+                </div>
+
+                <button id="authBtn" onclick="openAuthModal()" class="flex items-center gap-2 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/80 px-4 py-2 rounded-xl text-xs font-semibold transition-all hover:scale-105">
+                    <i class="fa-solid fa-lock text-purple-400"></i>
+                    <span id="authBtnText">Admin Login</span>
+                </button>
+
+                <button id="uploadBtn" onclick="openUploadModal()" class="hidden flex items-center gap-2 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-lg shadow-purple-600/30 hover:scale-105">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <span>Add Video</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="relative pt-12 pb-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto text-center overflow-hidden">
+        <!-- Glow Orbs -->
+        <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-72 h-72 bg-purple-600/20 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="absolute top-1/3 right-1/4 -translate-y-1/2 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+
+        <div class="relative z-10 max-w-3xl mx-auto">
+            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/20 text-purple-300 text-xs font-semibold mb-6">
+                <i class="fa-solid fa-sparkles text-amber-400"></i> High Impact Video Editing & Commercial AI Content
+            </div>
+
+            <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight text-white mb-6">
+                Turn Raw Clips Into <br>
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-400 to-cyan-400">
+                    High-Converting Visuals
+                </span>
+            </h1>
+
+            <p class="text-slate-400 text-sm sm:text-base leading-relaxed mb-8 max-w-2xl mx-auto">
+                एआई-जनरेटेड कमर्शियल प्रोडक्ट वीडियो से लेकर बी-रोल शॉट्स और सिनेमैटिक रील्स तक! यहाँ मेरी पोर्टफोलियो वीडियोज़ देखें और सीधे हाय-क्वालिटी में डाउनलोड करें।
+            </p>
+
+            <!-- Quick Stats -->
+            <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto bg-slate-900/60 p-4 rounded-2xl border border-slate-800/80 backdrop-blur-md">
+                <div>
+                    <div id="statTotal" class="text-2xl font-bold text-white">0</div>
+                    <div class="text-[11px] text-slate-400 font-medium">Total Edits</div>
+                </div>
+                <div class="border-x border-slate-800">
+                    <div id="statAi" class="text-2xl font-bold text-pink-400">0</div>
+                    <div class="text-[11px] text-slate-400 font-medium">AI Product Videos</div>
+                </div>
+                <div>
+                    <div id="statNormal" class="text-2xl font-bold text-blue-400">0</div>
+                    <div class="text-[11px] text-slate-400 font-medium">Normal / B-Rolls</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20 flex-grow w-full">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4 mb-8">
+            
+            <!-- Category Toggle Cards -->
+            <div class="grid grid-cols-2 gap-2 sm:gap-3 p-1.5 bg-slate-900/90 rounded-2xl border border-slate-800 max-w-xl w-full">
+                <button onclick="setFilter('ai')" id="tabBtnAi" class="flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-transparent hover:border-pink-500/30 hover:bg-pink-500/10 text-slate-300">
+                    <span class="w-2.5 h-2.5 rounded-full bg-pink-500 shadow-sm shadow-pink-500"></span>
+                    <span>AI Product Edits</span>
+                </button>
+                <button onclick="setFilter('normal')" id="tabBtnNormal" class="flex items-center justify-center gap-2.5 py-3 px-4 rounded-xl font-bold text-xs sm:text-sm transition-all border border-transparent hover:border-blue-500/30 hover:bg-blue-500/10 text-slate-300">
+                    <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shadow-sm shadow-blue-500"></span>
+                    <span>Normal & B-Rolls</span>
+                </button>
+            </div>
+
+            <!-- Search and Filter All Reset -->
+            <div class="flex items-center gap-2 w-full md:w-auto">
+                <div class="relative flex-grow md:w-64">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="handleSearch()" placeholder="Search project title or tag..." class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2.5 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors">
+                </div>
+                <button onclick="setFilter('all')" id="tabBtnAll" class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors shrink-0">
+                    Show All
+                </button>
+            </div>
+        </div>
+
+        <!-- Section Heading Title -->
+        <div class="flex items-center justify-between mb-6 border-b border-slate-800/80 pb-4">
+            <h2 id="sectionTitle" class="text-xl font-extrabold text-white flex items-center gap-2">
+                <i class="fa-solid fa-layer-group text-purple-400"></i> All Showcase Videos
+            </h2>
+            <span id="resultCount" class="text-xs text-slate-400 font-medium bg-slate-900 px-3 py-1 rounded-full border border-slate-800">Showing 0 items</span>
+        </div>
+
+        <div id="videoGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Dynamic Video Cards Inserted Here via JavaScript -->
+        </div>
+
+        <!-- Empty State Container -->
+        <div id="emptyState" class="hidden text-center py-16 glass-card rounded-3xl border border-dashed border-slate-800 my-8">
+            <div class="w-16 h-16 rounded-2xl bg-slate-800/80 flex items-center justify-center mx-auto mb-4 text-slate-500 text-2xl">
+                <i class="fa-solid fa-film"></i>
+            </div>
+            <h3 class="text-lg font-bold text-white mb-1">No Videos Found</h3>
+            <p class="text-xs text-slate-400 max-w-sm mx-auto mb-6">इस कैटेगरी में अभी कोई वीडियो नहीं है। एडमिन पैनल से नई वीडियो अपलोड करें!</p>
+            <button id="emptyUploadBtn" onclick="openUploadModal()" class="hidden inline-flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-xl text-xs font-semibold">
+                <i class="fa-solid fa-plus"></i> Upload First Video
+            </button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-slate-800/80 py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-2 text-slate-400 text-xs">
+                <span>© 2026 NEXUS EDIT PORTFOLIO. All rights reserved.</span>
+            </div>
+            <div class="flex items-center gap-4 text-xs font-semibold text-slate-400">
+                <span class="text-slate-500">Need Custom Video Editing?</span>
+                <a href="mailto:contact@videocreator.com" class="text-purple-400 hover:underline"><i class="fa-solid fa-envelope mr-1"></i> Email Me</a>
+                <a href="#" onclick="showContactModal()" class="bg-purple-600/20 text-purple-300 hover:bg-purple-600 hover:text-white px-3 py-1.5 rounded-lg border border-purple-500/30 transition-all">
+                    <i class="fa-brands fa-whatsapp mr-1"></i> Get in Touch
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <div id="playerModal" class="fixed inset-0 z-50 hidden bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-4">
+        <div class="relative w-full max-w-4xl glass-card rounded-3xl overflow-hidden border border-slate-700/80 shadow-2xl flex flex-col max-h-[90vh]">
+            <!-- Header Bar -->
+            <div class="p-4 sm:p-5 border-b border-slate-800 flex items-center justify-between bg-slate-900/90">
+                <div class="flex items-center gap-3 pr-4 overflow-hidden">
+                    <span id="playerCategoryBadge" class="px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider bg-purple-500/20 text-purple-300 border border-purple-500/30 shrink-0">
+                        Category
+                    </span>
+                    <h3 id="playerTitle" class="text-base sm:text-lg font-bold text-white truncate">
+                        Video Title Here
+                    </h3>
+                </div>
+                <button onclick="closePlayerModal()" class="w-9 h-9 rounded-full bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors shrink-0">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Player Video Area -->
+            <div class="relative bg-black flex items-center justify-center flex-grow min-h-[300px] sm:min-h-[420px]">
+                <div id="videoContainer" class="w-full h-full flex items-center justify-center">
+                    <!-- HTML5 Video or Embed iframe populated dynamically -->
+                </div>
+            </div>
+
+            <!-- Video Details Footer -->
+            <div class="p-4 sm:p-6 bg-slate-900/95 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-t border-slate-800">
+                <div>
+                    <p id="playerDesc" class="text-xs sm:text-sm text-slate-300 mb-2">Video description details appear here.</p>
+                    <div id="playerTags" class="flex flex-wrap gap-1.5"></div>
+                </div>
+                <a id="playerDownloadBtn" href="#" target="_blank" download class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold px-6 py-3 rounded-xl text-xs sm:text-sm shadow-lg shadow-emerald-600/30 transition-all hover:scale-105 shrink-0">
+                    <i class="fa-solid fa-download"></i>
+                    <span>Download Full HD Video</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="authModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-md glass-card p-6 sm:p-8 rounded-3xl border border-purple-500/30 shadow-2xl relative">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800/60 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-purple-600/20 border border-purple-500/30 text-purple-400 flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+                <h3 class="text-xl font-black text-white">Admin Authentication</h3>
+                <p class="text-xs text-slate-400 mt-1">केवल एडमिन लॉगिन करके नई वीडियो अपलोड और डिलीट कर सकते हैं।</p>
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Username</label>
+                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="Enter password" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <button type="submit" class="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-bold py-3 rounded-xl text-xs transition-all shadow-lg shadow-purple-600/30">
+                    Log In to Admin Dashboard
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="uploadModal" class="fixed inset-0 z-50 hidden bg-slate-950/85 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto">
+        <div class="w-full max-w-xl glass-card p-6 sm:p-8 rounded-3xl border border-slate-700 shadow-2xl relative my-8">
+            <button onclick="closeUploadModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800/60 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-10 h-10 rounded-xl bg-purple-600/20 border border-purple-500/30 text-purple-400 flex items-center justify-center text-lg">
+                    <i class="fa-solid fa-video"></i>
+                </div>
+                <div>
+                    <h3 id="uploadModalHeader" class="text-lg font-bold text-white">Add New Showcase Video</h3>
+                    <p class="text-xs text-slate-400">अपनी AI या नॉर्मल एडिट की हुई वीडियो की डिटेल्स जोड़ें</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleSaveVideo(event)" class="space-y-4">
+                <input type="hidden" id="editVideoId">
+
+                <!-- Video Title -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Project Title *</label>
+                    <input type="text" id="formTitle" required placeholder="e.g., Luxury Watch Commercial AI Video" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                </div>
+
+                <!-- Category Selection -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Editing Category *</label>
+                        <select id="formCategory" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                            <option value="ai">🤖 AI Product Video Editing</option>
+                            <option value="normal">🎬 Normal Editing & B-Rolls</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Tags (Comma Separated)</label>
+                        <input type="text" id="formTags" placeholder="e.g., AI, Product, 4K, Reel" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+
+                <!-- Direct Gallery Video File Upload -->
+                <div class="p-3 bg-purple-950/30 border border-purple-500/30 rounded-2xl">
+                    <label class="block text-xs font-bold text-purple-300 mb-1">
+                        <i class="fa-solid fa-file-video mr-1"></i> Upload Video from Gallery (गैलरी से वीडियो चुनें)
+                    </label>
+                    <input type="file" id="formVideoFile" accept="video/*" onchange="handleVideoFileSelect(event)" class="w-full text-xs text-slate-300 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-purple-600 file:text-white hover:file:bg-purple-500 cursor-pointer">
+                    <p id="videoFileStatus" class="text-[10px] text-purple-400 mt-1">आप फ़ोन या कंप्यूटर की गैलरी से सीधी `.mp4` वीडियो चुन सकते हैं।</p>
+                </div>
+
+                <!-- Optional Thumbnail Image Upload -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">Upload Cover Photo (Optional)</label>
+                        <input type="file" id="formThumbFile" accept="image/*" class="w-full text-xs text-slate-300 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-xs file:bg-slate-800 file:text-slate-300 hover:file:bg-slate-700 cursor-pointer">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">OR External Video URL (Optional Fallback)</label>
+                        <input type="url" id="formVideoUrl" placeholder="https://..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">Short Description</label>
+                    <textarea id="formDesc" rows="2" placeholder="Brief details about the software used, sound design, prompt techniques, etc." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-2.5 text-xs text-white focus:outline-none focus:border-purple-500"></textarea>
+                </div>
+
+                <!-- Form Submit Buttons -->
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" onclick="closeUploadModal()" class="px-5 py-2.5 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700">
+                        Cancel
+                    </button>
+                    <button type="submit" id="saveSubmitBtn" class="px-6 py-2.5 rounded-xl text-xs font-bold bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-500 hover:to-indigo-500 shadow-lg shadow-purple-600/30">
+                        Save to Portfolio
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="contactModal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="w-full max-w-md glass-card p-6 rounded-3xl border border-slate-700 shadow-2xl text-center relative">
+            <button onclick="closeContactModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center mx-auto mb-4 text-2xl">
+                <i class="fa-brands fa-whatsapp"></i>
+            </div>
+
+            <h3 class="text-xl font-black text-white mb-1">Hire For Editing Projects</h3>
+            <p class="text-xs text-slate-400 mb-6">Want custom AI Product Editing or B-Roll Post Production? Contact directly:</p>
+
+            <div class="space-y-3">
+                <a href="https://wa.me/919876543210?text=Hi!%20I%20saw%20your%20video%20editing%20portfolio." target="_blank" class="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 px-4 rounded-xl text-xs transition-all">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Chat on WhatsApp
+                </a>
+                <a href="mailto:creator@videoedits.com" class="w-full flex items-center justify-center gap-3 bg-slate-800 hover:bg-slate-700 text-white font-semibold py-3 px-4 rounded-xl text-xs transition-all border border-slate-700">
+                    <i class="fa-solid fa-envelope text-purple-400"></i> Send Email Inquiry
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let db;
+        function initDB() {
+            return new Promise((resolve) => {
+                const request = indexedDB.open("NexusVideoDatabase", 1);
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains("media")) {
+                        database.createObjectStore("media");
+                    }
+                };
+                request.onsuccess = (e) => {
+                    db = e.target.result;
+                    resolve(db);
+                };
+                request.onerror = () => resolve(null);
+            });
+        }
+
+        function saveMediaBlob(key, blob) {
+            return new Promise((resolve) => {
+                if (!db) return resolve(false);
+                const tx = db.transaction("media", "readwrite");
+                const store = tx.objectStore("media");
+                store.put(blob, key);
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = () => resolve(false);
+            });
+        }
+
+        function getMediaBlob(key) {
+            return new Promise((resolve) => {
+                if (!db) return resolve(null);
+                const tx = db.transaction("media", "readonly");
+                const store = tx.objectStore("media");
+                const req = store.get(key);
+                req.onsuccess = () => resolve(req.result || null);
+                req.onerror = () => resolve(null);
+            });
+        }
+
+        function deleteMediaBlob(key) {
+            return new Promise((resolve) => {
+                if (!db) return resolve(false);
+                const tx = db.transaction("media", "readwrite");
+                const store = tx.objectStore("media");
+                store.delete(key);
+                tx.oncomplete = () => resolve(true);
+                tx.onerror = () => resolve(false);
+            });
+        }
+
+        const defaultVideos = [
+            {
+                id: 'vid-1',
+                title: 'Cyberpunk Sneaker AI Commercial',
+                category: 'ai',
+                tags: ['AI Product', 'RunwayGen2', 'Midjourney', '3D Render'],
+                videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                thumbUrl: 'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=800&auto=format&fit=crop&q=80',
+                downloadUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+                desc: '100% AI Generated hyper-realistic commercial for luxury futuristic sneakers.'
+            },
+            {
+                id: 'vid-2',
+                title: 'Cinematic Travel Reel & Sound Design',
+                category: 'normal',
+                tags: ['B-Roll', 'Color Grade', 'Speed Ramp', 'Reel'],
+                videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+                thumbUrl: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=800&auto=format&fit=crop&q=80',
+                downloadUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+                desc: 'Real B-roll cuts with dynamic seamless transitions and speed ramping.'
+            }
+        ];
+
+        let videos = [];
+        let activeFilter = 'all';
+        let searchQuery = '';
+        let isAdminLoggedIn = false;
+        let selectedVideoBlob = null;
+        let generatedAutoThumb = null;
+
+        const ADMIN_USER = 'Dev04rathore';
+        const ADMIN_PASS = 'heyiamsebrowmine@@@#';
+
+        async function initApp() {
+            await initDB();
+
+            const savedData = localStorage.getItem('nexus_portfolio_videos');
+            if (savedData) {
+                try {
+                    videos = JSON.parse(savedData);
+                } catch (e) {
+                    videos = defaultVideos;
+                }
+            } else {
+                videos = defaultVideos;
+                saveVideosToStorage();
+            }
+
+            if (localStorage.getItem('nexus_admin_session') === 'true') {
+                isAdminLoggedIn = true;
+            }
+
+            updateAdminUI();
+            renderGrid();
+            updateStats();
+        }
+
+        function saveVideosToStorage() {
+            localStorage.setItem('nexus_portfolio_videos', JSON.stringify(videos));
+        }
+
+        async function renderGrid() {
+            const gridContainer = document.getElementById('videoGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            gridContainer.innerHTML = '';
+
+            let filtered = videos.filter(v => {
+                const matchesFilter = activeFilter === 'all' || v.category === activeFilter;
+                const searchLower = searchQuery.toLowerCase();
+                const matchesSearch = !searchQuery || 
+                    v.title.toLowerCase().includes(searchLower) || 
+                    v.desc.toLowerCase().includes(searchLower) ||
+                    (v.tags && v.tags.some(t => t.toLowerCase().includes(searchLower)));
+                return matchesFilter && matchesSearch;
+            });
+
+            document.getElementById('resultCount').textContent = `Showing ${filtered.length} items`;
+
+            if (filtered.length === 0) {
+                emptyState.classList.remove('hidden');
+                gridContainer.classList.add('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+            gridContainer.classList.remove('hidden');
+
+            for (const video of filtered) {
+                const isAi = video.category === 'ai';
+                const categoryLabel = isAi ? 'AI Product Video' : 'Normal / B-Roll';
+                const categoryBadgeClass = isAi 
+                    ? 'bg-pink-500/20 text-pink-300 border-pink-500/30' 
+                    : 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+                
+                const tagsHtml = (video.tags || []).map(t => 
+                    `<span class="text-[10px] bg-slate-800/80 text-slate-400 px-2 py-0.5 rounded-md border border-slate-700/60">#${t}</span>`
+                ).join(' ');
+
+                // Resolve Thumbnail image URL
+                let displayThumb = video.thumbUrl || 'https://images.unsplash.com/photo-1574717024653-61fd2cf4d44d?w=800&auto=format&fit=crop&q=80';
+                if (video.hasLocalThumb) {
+                    const thumbBlob = await getMediaBlob(video.id + '_thumb');
+                    if (thumbBlob) displayThumb = URL.createObjectURL(thumbBlob);
+                }
+
+                const adminControlsHtml = isAdminLoggedIn ? `
+                    <div class="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-slate-950/80 p-1 rounded-xl border border-slate-700 backdrop-blur-md">
+                        <button onclick="editVideo(event, '${video.id}')" title="Edit Video" class="w-7 h-7 rounded-lg bg-indigo-600/80 hover:bg-indigo-500 text-white flex items-center justify-center text-xs transition-colors">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteVideo(event, '${video.id}')" title="Delete Video" class="w-7 h-7 rounded-lg bg-rose-600/80 hover:bg-rose-500 text-white flex items-center justify-center text-xs transition-colors">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                ` : '';
+
+                const card = document.createElement('div');
+                card.className = 'glass-card rounded-2xl overflow-hidden flex flex-col group relative border border-slate-800/80 hover:border-purple-500/40 cursor-pointer';
+                card.onclick = () => openPlayerModal(video.id);
+
+                card.innerHTML = `
+                    <div class="relative aspect-video bg-slate-900 overflow-hidden">
+                        <img src="${displayThumb}" 
+                             alt="${video.title}" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80"></div>
+
+                        <span class="absolute top-3 left-3 z-10 text-[10px] font-bold px-2.5 py-1 rounded-full border backdrop-blur-md ${categoryBadgeClass}">
+                            <i class="${isAi ? 'fa-solid fa-wand-magic-sparkles mr-1' : 'fa-solid fa-clapperboard mr-1'}"></i>
+                            ${categoryLabel}
+                        </span>
+
+                        ${adminControlsHtml}
+
+                        <div class="absolute inset-0 flex items-center justify-center opacity-90 group-hover:opacity-100 transition-opacity">
+                            <div class="w-12 h-12 rounded-full bg-purple-600/90 text-white flex items-center justify-center shadow-lg shadow-purple-600/50 group-hover:scale-110 transition-transform">
+                                <i class="fa-solid fa-play ml-1 text-base"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 flex flex-col justify-between flex-grow">
+                        <div>
+                            <h3 class="font-bold text-slate-100 text-base mb-2 group-hover:text-purple-300 transition-colors line-clamp-1">
+                                ${video.title}
+                            </h3>
+                            <p class="text-xs text-slate-400 line-clamp-2 leading-relaxed mb-4">
+                                ${video.desc || 'Direct gallery showcase edit.'}
+                            </p>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-800/80 flex items-center justify-between gap-2">
+                            <div class="flex flex-wrap gap-1 overflow-hidden h-5">
+                                ${tagsHtml}
+                            </div>
+
+                            <button onclick="downloadVideoFile(event, '${video.id}')" title="Download HD File" class="inline-flex items-center gap-1.5 bg-slate-800 hover:bg-emerald-600 text-slate-300 hover:text-white px-3 py-1.5 rounded-lg text-xs font-semibold transition-all shrink-0">
+                                <i class="fa-solid fa-download"></i>
+                                <span class="hidden sm:inline">Download</span>
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                gridContainer.appendChild(card);
+            }
+        }
+
+        async function handleVideoFileSelect(event) {
+            const file = event.target.files[0];
+            const statusEl = document.getElementById('videoFileStatus');
+
+            if (!file) {
+                selectedVideoBlob = null;
+                statusEl.textContent = 'आप फ़ोन या कंप्यूटर की गैलरी से सीधी .mp4 वीडियो चुन सकते हैं।';
+                return;
+            }
+
+            selectedVideoBlob = file;
+            statusEl.textContent = `Selected: ${file.name} (${(file.size / (1024 * 1024)).toFixed(1)} MB) - Auto Cover Generating...`;
+
+            // Auto-generate thumbnail from selected video frame
+            try {
+                const videoEl = document.createElement('video');
+                videoEl.preload = 'metadata';
+                videoEl.src = URL.createObjectURL(file);
+                
+                videoEl.onloadeddata = () => {
+                    videoEl.currentTime = 1;
+                };
+
+                videoEl.onseeked = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = videoEl.videoWidth || 640;
+                    canvas.height = videoEl.videoHeight || 360;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(videoEl, 0, 0, canvas.width, canvas.height);
+                    
+                    canvas.toBlob((blob) => {
+                        generatedAutoThumb = blob;
+                        statusEl.textContent = `Ready: ${file.name} - Cover generated automatically! ✨`;
+                        URL.revokeObjectURL(videoEl.src);
+                    }, 'image/jpeg', 0.85);
+                };
+            } catch (err) {
+                statusEl.textContent = `Ready: ${file.name}`;
+            }
+        }
+
+        async function openPlayerModal(id) {
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+
+            const playerModal = document.getElementById('playerModal');
+            const videoContainer = document.getElementById('videoContainer');
+            const titleEl = document.getElementById('playerTitle');
+            const descEl = document.getElementById('playerDesc');
+            const badgeEl = document.getElementById('playerCategoryBadge');
+            const tagsEl = document.getElementById('playerTags');
+            const downloadBtn = document.getElementById('playerDownloadBtn');
+
+            titleEl.textContent = video.title;
+            descEl.textContent = video.desc || 'Direct high-definition edit render preview.';
+            
+            const isAi = video.category === 'ai';
+            badgeEl.textContent = isAi ? 'AI Product Video' : 'Normal / B-Roll';
+            badgeEl.className = `px-2.5 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider ${isAi ? 'bg-pink-500/20 text-pink-300 border border-pink-500/30' : 'bg-blue-500/20 text-blue-300 border border-blue-500/30'}`;
+
+            tagsEl.innerHTML = (video.tags || []).map(t => 
+                `<span class="text-[10px] bg-slate-800 text-slate-300 px-2 py-0.5 rounded border border-slate-700">#${t}</span>`
+            ).join('');
+
+            downloadBtn.onclick = (e) => {
+                e.preventDefault();
+                downloadVideoFile(e, video.id);
+            };
+
+            let playUrl = video.videoUrl;
+            if (video.hasLocalVideo) {
+                const blob = await getMediaBlob(video.id + '_video');
+                if (blob) playUrl = URL.createObjectURL(blob);
+            }
+
+            if (playUrl && (playUrl.includes('youtube.com') || playUrl.includes('youtu.be'))) {
+                let embedUrl = playUrl;
+                if (playUrl.includes('watch?v=')) {
+                    embedUrl = playUrl.replace('watch?v=', 'embed/');
+                }
+                videoContainer.innerHTML = `
+                    <iframe src="${embedUrl}?autoplay=1" class="w-full h-full min-h-[350px] rounded-xl" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                `;
+            } else {
+                videoContainer.innerHTML = `
+                    <video controls autoplay class="w-full max-h-[70vh] rounded-xl shadow-2xl">
+                        <source src="${playUrl}" type="video/mp4">
+                        Your browser does not support video playback.
+                    </video>
+                `;
+            }
+
+            playerModal.classList.remove('hidden');
+        }
+
+        function closePlayerModal() {
+            const playerModal = document.getElementById('playerModal');
+            const videoContainer = document.getElementById('videoContainer');
+            videoContainer.innerHTML = '';
+            playerModal.classList.add('hidden');
+        }
+
+        function closeUploadModal() {
+            document.getElementById('uploadModal').classList.add('hidden');
+        }
+
+        function setFilter(filter) {
+            activeFilter = filter;
+            
+            const titleEl = document.getElementById('sectionTitle');
+            if (filter === 'ai') {
+                titleEl.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-pink-400"></i> AI Product Videos';
+            } else if (filter === 'normal') {
+                titleEl.innerHTML = '<i class="fa-solid fa-clapperboard text-blue-400"></i> Normal & B-Roll Videos';
+            } else {
+                titleEl.innerHTML = '<i class="fa-solid fa-layer-group text-purple-400"></i> All Showcase Videos';
+            }
+
+            const navTabs = { all: 'navTabAll', ai: 'navTabAi', normal: 'navTabNormal' };
+            Object.keys(navTabs).forEach(k => {
+                const btn = document.getElementById(navTabs[k]);
+                if (btn) {
+                    if (k === filter) {
+                        btn.className = 'px-5 py-2 rounded-full text-xs font-semibold transition-all bg-purple-600 text-white shadow-md shadow-purple-600/30';
+                    } else {
+                        btn.className = 'px-5 py-2 rounded-full text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-all';
+                    }
+                }
+            });
+
+            renderGrid();
+        }
+
+        function handleSearch() {
+            searchQuery = document.getElementById('searchInput').value.trim();
+            renderGrid();
+        }
+
+        function updateAdminUI() {
+            const adminIndicator = document.getElementById('adminIndicator');
+            const uploadBtn = document.getElementById('uploadBtn');
+            const emptyUploadBtn = document.getElementById('emptyUploadBtn');
+            const authBtn = document.getElementById('authBtn');
+            const authBtnText = document.getElementById('authBtnText');
+
+            if (isAdminLoggedIn) {
+                if (adminIndicator) {
+                    adminIndicator.classList.remove('hidden');
+                    adminIndicator.classList.add('flex');
+                }
+                if (uploadBtn) uploadBtn.classList.remove('hidden');
+                if (emptyUploadBtn) emptyUploadBtn.classList.remove('hidden');
+                if (authBtnText) authBtnText.textContent = 'Admin Logout';
+                if (authBtn) authBtn.onclick = handleLogout;
+            } else {
+                if (adminIndicator) {
+                    adminIndicator.classList.add('hidden');
+                    adminIndicator.classList.remove('flex');
+                }
+                if (uploadBtn) uploadBtn.classList.add('hidden');
+                if (emptyUploadBtn) emptyUploadBtn.classList.add('hidden');
+                if (authBtnText) authBtnText.textContent = 'Admin Login';
+                if (authBtn) authBtn.onclick = openAuthModal;
+            }
+        }
+
+        function updateStats() {
+            const total = videos.length;
+            const aiCount = videos.filter(v => v.category === 'ai').length;
+            const normalCount = videos.filter(v => v.category === 'normal').length;
+
+            const statTotal = document.getElementById('statTotal');
+            const statAi = document.getElementById('statAi');
+            const statNormal = document.getElementById('statNormal');
+
+            if (statTotal) statTotal.textContent = total;
+            if (statAi) statAi.textContent = aiCount;
+            if (statNormal) statNormal.textContent = normalCount;
+        }
+
+        function openAuthModal() {
+            document.getElementById('authModal').classList.remove('hidden');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            const u = document.getElementById('loginUsername');
+            const p = document.getElementById('loginPassword');
+            if (u) u.value = '';
+            if (p) p.value = '';
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const user = document.getElementById('loginUsername').value.trim();
+            const pass = document.getElementById('loginPassword').value.trim();
+
+            if (user === ADMIN_USER && pass === ADMIN_PASS) {
+                isAdminLoggedIn = true;
+                localStorage.setItem('nexus_admin_session', 'true');
+                updateAdminUI();
+                renderGrid();
+                closeAuthModal();
+                showToast('Successfully logged in as Admin!', 'success');
+            } else {
+                showToast('Invalid Username or Password', 'error');
+            }
+        }
+
+        function handleLogout() {
+            isAdminLoggedIn = false;
+            localStorage.removeItem('nexus_admin_session');
+            updateAdminUI();
+            renderGrid();
+            showToast('Admin logged out successfully.', 'info');
+        }
+
+        async function downloadVideoFile(e, id) {
+            if(e) e.stopPropagation();
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+
+            let downloadSrc = video.downloadUrl || video.videoUrl;
+            let fileName = `${video.title.replace(/[^a-zA-Z0-9]/g, '_')}.mp4`;
+
+            if (video.hasLocalVideo) {
+                const blob = await getMediaBlob(video.id + '_video');
+                if (blob) {
+                    downloadSrc = URL.createObjectURL(blob);
+                }
+            }
+
+            if (!downloadSrc) {
+                showToast('Video file unavailable for download', 'error');
+                return;
+            }
+
+            const a = document.createElement('a');
+            a.href = downloadSrc;
+            a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('Starting video download...', 'success');
+        }
+
+        async function handleSaveVideo(e) {
+            e.preventDefault();
+
+            const editId = document.getElementById('editVideoId').value;
+            const title = document.getElementById('formTitle').value.trim();
+            const category = document.getElementById('formCategory').value;
+            const tagsRaw = document.getElementById('formTags').value;
+            const fallbackVideoUrl = document.getElementById('formVideoUrl').value.trim();
+            const desc = document.getElementById('formDesc').value.trim();
+            const thumbFileInput = document.getElementById('formThumbFile');
+
+            const submitBtn = document.getElementById('saveSubmitBtn');
+            submitBtn.textContent = 'Saving File...';
+            submitBtn.disabled = true;
+
+            const tags = tagsRaw ? tagsRaw.split(',').map(t => t.trim()).filter(Boolean) : [];
+            const videoId = editId || 'vid-' + Date.now();
+
+            let hasLocalVideo = false;
+            let hasLocalThumb = false;
+
+            // Save video Blob to IndexedDB if uploaded from gallery
+            if (selectedVideoBlob) {
+                await saveMediaBlob(videoId + '_video', selectedVideoBlob);
+                hasLocalVideo = true;
+            }
+
+            // Save custom or generated Thumbnail Blob to IndexedDB
+            if (thumbFileInput.files && thumbFileInput.files[0]) {
+                await saveMediaBlob(videoId + '_thumb', thumbFileInput.files[0]);
+                hasLocalThumb = true;
+            } else if (generatedAutoThumb) {
+                await saveMediaBlob(videoId + '_thumb', generatedAutoThumb);
+                hasLocalThumb = true;
+            }
+
+            if (editId) {
+                const index = videos.findIndex(v => v.id === editId);
+                if (index !== -1) {
+                    videos[index] = {
+                        ...videos[index],
+                        title, category, tags, desc,
+                        videoUrl: fallbackVideoUrl || videos[index].videoUrl,
+                        hasLocalVideo: hasLocalVideo || videos[index].hasLocalVideo,
+                        hasLocalThumb: hasLocalThumb || videos[index].hasLocalThumb
+                    };
+                    showToast('Video updated successfully!', 'success');
+                }
+            } else {
+                const newVideo = {
+                    id: videoId,
+                    title,
+                    category,
+                    tags,
+                    desc,
+                    videoUrl: fallbackVideoUrl || '',
+                    hasLocalVideo,
+                    hasLocalThumb,
+                    downloadUrl: ''
+                };
+                videos.unshift(newVideo);
+                showToast('New video uploaded from gallery!', 'success');
+            }
+
+            saveVideosToStorage();
+            updateStats();
+            await renderGrid();
+            closeUploadModal();
+
+            submitBtn.textContent = 'Save to Portfolio';
+            submitBtn.disabled = false;
+            selectedVideoBlob = null;
+            generatedAutoThumb = null;
+        }
+
+        async function deleteVideo(e, id) {
+            e.stopPropagation();
+            if (!isAdminLoggedIn) return;
+
+            // Delete associated Blobs from IndexedDB
+            await deleteMediaBlob(id + '_video');
+            await deleteMediaBlob(id + '_thumb');
+
+            videos = videos.filter(v => v.id !== id);
+            saveVideosToStorage();
+            updateStats();
+            await renderGrid();
+            showToast('Video removed from portfolio.', 'info');
+        }
+
+        function openUploadModal() {
+            if (!isAdminLoggedIn) {
+                openAuthModal();
+                return;
+            }
+            selectedVideoBlob = null;
+            generatedAutoThumb = null;
+            document.getElementById('editVideoId').value = '';
+            document.getElementById('uploadModalHeader').textContent = 'Add New Showcase Video';
+            document.getElementById('formTitle').value = '';
+            document.getElementById('formCategory').value = 'ai';
+            document.getElementById('formTags').value = '';
+            document.getElementById('formVideoUrl').value = '';
+            document.getElementById('formVideoFile').value = '';
+            document.getElementById('formThumbFile').value = '';
+            document.getElementById('formDesc').value = '';
+            document.getElementById('videoFileStatus').textContent = 'आप फ़ोन या कंप्यूटर की गैलरी से सीधी .mp4 वीडियो चुन सकते हैं।';
+
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function editVideo(e, id) {
+            e.stopPropagation();
+            if (!isAdminLoggedIn) return;
+
+            const video = videos.find(v => v.id === id);
+            if (!video) return;
+
+            document.getElementById('editVideoId').value = video.id;
+            document.getElementById('uploadModalHeader').textContent = 'Edit Video Details';
+            document.getElementById('formTitle').value = video.title;
+            document.getElementById('formCategory').value = video.category;
+            document.getElementById('formTags').value = (video.tags || []).join(', ');
+            document.getElementById('formVideoUrl').value = video.videoUrl || '';
+            document.getElementById('formDesc').value = video.desc || '';
+
+            document.getElementById('uploadModal').classList.remove('hidden');
+        }
+
+        function deleteVideo(e, id) {
+            e.stopPropagation();
+            if (!isAdminLoggedIn) return;
+
+            videos = videos.filter(v => v.id !== id);
+            saveVideosToStorage();
+            updateStats();
+            renderGrid();
+            showToast('Video removed from portfolio.', 'info');
+        }
+
+        function showContactModal() {
+            document.getElementById('contactModal').classList.remove('hidden');
+        }
+        function closeContactModal() {
+            document.getElementById('contactModal').classList.add('hidden');
+        }
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+
+            let bgClass = 'bg-slate-900 border-slate-700 text-white';
+            let icon = 'fa-circle-info text-cyan-400';
+
+            if (type === 'success') {
+                bgClass = 'bg-slate-900 border-emerald-500/50 text-white';
+                icon = 'fa-circle-check text-emerald-400';
+            } else if (type === 'error') {
+                bgClass = 'bg-slate-900 border-rose-500/50 text-white';
+                icon = 'fa-circle-exclamation text-rose-400';
+            }
+
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-2xl border shadow-xl backdrop-blur-lg text-xs font-semibold animate-bounce-short transition-all ${bgClass}`;
+            toast.innerHTML = `
+                <i class="fa-solid ${icon} text-base"></i>
+                <span>${message}</span>
+            `;
+
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closePlayerModal();
+                closeAuthModal();
+                closeUploadModal();
+                closeContactModal();
+            }
+        });
+
+        window.onload = initApp;
+    </script>
+</body>
+</html>
+
